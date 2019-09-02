@@ -7,3 +7,7 @@ class GrayModel(models.Model):
 class FaceReadModel(models.Model):
     image = models.ImageField(upload_to="uploads/")
     faceread_image = models.ImageField(default = 'faceread/faceread.jpg')
+
+class AnimeModel(models.Model):
+    image = models.ImageField(upload_to="uploads/")
+    anime_image = models.ImageField(default = 'anime/anime.jpg')

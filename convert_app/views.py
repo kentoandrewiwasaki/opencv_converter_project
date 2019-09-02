@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import GrayForm, FaceReadForm
-from .models import GrayModel, FaceReadModel
+from .forms import GrayForm, FaceReadForm, AnimeForm
+from .models import GrayModel, FaceReadModel, AnimeModel
 import cv2
-import os
+import numpy as np
 from django.conf import settings
 
 def indexfunc(request):
@@ -73,3 +73,52 @@ def faceread(input_path,output_path):
     cv2.imwrite(output_path, faceread_img)
 
 #############################################################################################
+
+def animefunc(request):
+    if request.method == 'POST':
+        form = AnimeForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('anime')
+    else:
+        form = AnimeForm()
+        max_id = AnimeModel.objects.latest('id').id
+        obj = AnimeModel.objects.get(id = max_id)
+        input_path = settings.BASE_DIR + obj.image.url
+        output_path = settings.BASE_DIR + "/media/anime/anime.jpg"
+        anime(input_path, output_path)
+
+    return render(request, 'anime.html', {
+        'form': form,
+        'obj': obj,
+    })
+
+def anime_filter(img):
+    # グレースケール変換
+    gray = cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+
+    # ぼかしでノイズ低減
+    edge = cv2.blur(gray, (3, 3))
+
+    # Cannyアルゴリズムで輪郭抽出
+    edge = cv2.Canny(edge, 50, 150, apertureSize=3) 
+
+    # 輪郭画像をRGB色空間に変換
+    edge = cv2.cvtColor(edge, cv2.COLOR_GRAY2BGR)
+
+    # 画像の領域分割
+    img = cv2.pyrMeanShiftFiltering(img, 5, 20)
+    
+    # 差分を返す
+    return cv2.subtract(img, edge)
+
+
+def anime(input_path, output_path):
+    # 入力画像の読み込み
+    img = cv2.imread(input_path)
+
+    # 画像のアニメ絵化
+    anime_img = anime_filter(img)
+    
+    # 結果出力
+    cv2.imwrite(output_path, anime_img)
