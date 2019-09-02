@@ -106,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
@@ -119,3 +119,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#CSSファイルの保存場所の指定
+STATICFILES_DIRS = [
+  os.path.join(BASE_DIR, "static")
+]
+
+#画像ファイルの保存場所の指定
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+#BASE_DIRのmediaファイルに保存
+MEDIA_URL = "/media/"
+#画像ファイルのURLを指定する
+
+LOGIN_URL = "login"
