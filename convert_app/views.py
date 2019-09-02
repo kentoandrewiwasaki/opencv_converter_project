@@ -1,12 +1,15 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import GrayForm
-from .models import GrayModel
+from .forms import GrayForm, FaceReadForm
+from .models import GrayModel, FaceReadModel
 import cv2
+import os
 from django.conf import settings
 
 def indexfunc(request):
   return render(request, 'index.html')
+
+#########################################################################
 
 def grayfunc(request):
     if request.method == 'POST':
@@ -24,15 +27,49 @@ def grayfunc(request):
 
     return render(request, 'gray.html', {
         'form': form,
-        'obj':obj,
+        'obj': obj,
     })
-
-
-###########ここをカスタマイズ############
 
 def gray(input_path,output_path):
     img = cv2.imread(input_path)
     img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     cv2.imwrite(output_path, img_gray)
 
-######################################
+################################################################################
+
+def facereadfunc(request):
+    if request.method == 'POST':
+        form = FaceReadForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('faceread')
+    else:
+        form = FaceReadForm()
+        max_id = FaceReadModel.objects.latest('id').id
+        obj = FaceReadModel.objects.get(id = max_id)
+        input_path = settings.BASE_DIR + obj.image.url
+        output_path = settings.BASE_DIR + "/media/faceread/faceread.jpg"
+        faceread(input_path,output_path)
+
+    return render(request, 'faceread.html', {
+        'form': form,
+        'obj': obj,
+    })
+
+def faceread(input_path,output_path):
+    img = cv2.imread(input_path)
+    cascade = cv2.CascadeClassifier(settings.CASCADE_FILE_PATH)    
+    # グレースケール変換
+    image_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # 顔領域の探索
+    face = cascade.detectMultiScale(image_gray, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30))
+    
+    # 顔領域を赤色の矩形で囲む
+    for (x, y, w, h) in face:
+        faceread_img = cv2.rectangle(img, (x, y), (x + w, y+h), (0,0,200), 3)
+
+    # 結果を出力
+    cv2.imwrite(output_path, faceread_img)
+
+#############################################################################################

@@ -132,3 +132,5 @@ MEDIA_URL = "/media/"
 #画像ファイルのURLを指定する
 
 LOGIN_URL = "login"
+
+CASCADE_FILE_PATH = os.path.join(BASE_DIR, 'haarcascade_frontalface_default.xml')
