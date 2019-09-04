@@ -11,9 +11,9 @@
   </form>
   <td>{{ obj.description }}</td>
   {% if obj.image.url %}
-    <td><img src="{{ obj.image.url }}"/></td>
+    <td><img src="{{ obj.image.url }}" width=700 height=auto /></td>
   {% endif %}
   {% if obj.anime_image.url %}
-    <td><img src="{{ obj.anime_image.url }}"/></td>
+    <td><img src="{{ obj.anime_image.url }}" width=700 height=auto /></td>
   {% endif %}
 {% endblock content %}

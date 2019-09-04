@@ -11,3 +11,7 @@ class FaceReadModel(models.Model):
 class AnimeModel(models.Model):
     image = models.ImageField(upload_to="uploads/")
     anime_image = models.ImageField(default = 'anime/anime.jpg')
+
+class MosaicModel(models.Model):
+    image = models.ImageField(upload_to="uploads/")
+    mosaic_image = models.ImageField(default = 'mosaic/mosaic.jpg')
