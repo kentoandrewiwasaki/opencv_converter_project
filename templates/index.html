@@ -1,7 +1,53 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block customcss %}
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
 {% endblock customcss %}
 
 {% block content %}
+  <div class="row1_card">
+    <div class="card" style="width: 18rem;">
+        <img src="{{ gray_obj.gray_image.url }}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">グレースケール化</h5>
+          <p class="card-text"></p>
+          <a href="{% url 'gray' %}" class="btn btn-primary">変換ページへ移動</a>
+        </div>
+    </div>
+    <div class="card" style="width: 18rem;">
+        <img src="{{ anime_obj.anime_image.url }}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">アニメ化</h5>
+          <p class="card-text"></p>
+          <a href="{% url 'anime' %}" class="btn btn-primary">変換ページへ移動</a>
+        </div>
+    </div>
+    <div class="card" style="width: 18rem;">
+        <img src="{{ faceread_obj.faceread_image.url }}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">顔認証化</h5>
+          <p class="card-text"></p>
+          <a href="{% url 'faceread' %}" class="btn btn-primary">変換ページへ移動</a>
+        </div>
+    </div>
+  </div>
+  <div class="row2_card">
+    <div class="card" style="width: 18rem;">
+      <img src="{{ mosaic_obj.mosaic_image.url }}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">モザイク化</h5>
+          <p class="card-text"></p>
+          <a href="{% url 'mosaic' %}" class="btn btn-primary">変換ページへ移動</a>
+        </div>
+    </div>
+    <div class="card" style="width: 18rem;">
+      <img src="{{ facemosaic_obj.facemosaic_image.url }}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">顔モザイク化</h5>
+          <p class="card-text"></p>
+          <a href="{% url 'facemosaic' %}" class="btn btn-primary">変換ページへ移動</a>
+        </div>
+    </div>
+  </div>
 {% endblock content %}

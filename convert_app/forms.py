@@ -1,5 +1,5 @@
 from django import forms
-from .models import GrayModel, FaceReadModel, AnimeModel, MosaicModel
+from .models import GrayModel, FaceReadModel, AnimeModel, MosaicModel, FaceMosaicModel
 
 class GrayForm(forms.ModelForm):
     class Meta:
@@ -19,4 +19,9 @@ class AnimeForm(forms.ModelForm):
 class MosaicForm(forms.ModelForm):
     class Meta:
         model = MosaicModel
+        fields = ('image',)
+
+class FaceMosaicForm(forms.ModelForm):
+    class Meta:
+        model = FaceMosaicModel
         fields = ('image',)

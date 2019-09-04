@@ -4,17 +4,17 @@
 {% endblock customcss %}
 
 {% block content %}
+  <h1>顔認識化</h1>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">変換</button>
   </form>
-  <td>{{ obj.description }}</td>
-  {% if obj.image.url %}
-    <td><img src="{{ obj.image.url }}" width=700 height=auto /></td>
+  {% if faceread_obj.image.url %}
+    <td><img src="{{ faceread_obj.image.url }}" width=700 height=auto /></td>
   {% endif %}
-  {% if obj.faceread_image.url %}
-    <td><img src="{{ obj.faceread_image.url }}" width=700 height=auto /></td>
+  {% if faceread_obj.faceread_image.url %}
+    <td><img src="{{ faceread_obj.faceread_image.url }}" width=700 height=auto /></td>
   {% endif %}
 {% endblock content %}
 

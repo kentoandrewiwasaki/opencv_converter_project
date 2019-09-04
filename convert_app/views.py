@@ -1,12 +1,23 @@
 from django.shortcuts import render, redirect
-from .forms import GrayForm, FaceReadForm, AnimeForm, MosaicForm
-from .models import GrayModel, FaceReadModel, AnimeModel, MosaicModel
+from .forms import GrayForm, FaceReadForm, AnimeForm, MosaicForm, FaceMosaicForm
+from .models import GrayModel, FaceReadModel, AnimeModel, MosaicModel, FaceMosaicModel
 import cv2
 import numpy as np
 from django.conf import settings
 
 def indexfunc(request):
-    return render(request, 'index.html')
+    gray_obj = GrayModel.objects.get(id = GrayModel.objects.latest('id').id)
+    anime_obj = AnimeModel.objects.get(id = AnimeModel.objects.latest('id').id)
+    faceread_obj = FaceReadModel.objects.get(id = FaceReadModel.objects.latest('id').id)
+    mosaic_obj = MosaicModel.objects.get(id = MosaicModel.objects.latest('id').id)
+    facemosaic_obj = FaceMosaicModel.objects.get(id = FaceMosaicModel.objects.latest('id').id)
+    return render(request, 'index.html', {
+        'gray_obj': gray_obj,
+        'anime_obj': anime_obj,
+        'faceread_obj': faceread_obj,
+        'mosaic_obj': mosaic_obj,
+        'facemosaic_obj': facemosaic_obj,
+    })
 
 ##################################################################################################
 
@@ -18,14 +29,13 @@ def grayfunc(request):
             return redirect('gray')
     else:
         form = GrayForm()
-        max_id = GrayModel.objects.latest('id').id
-        obj = GrayModel.objects.get(id = max_id)
-        input_path = settings.BASE_DIR + obj.image.url
-        output_path = settings.BASE_DIR + "/media/gray/gray.jpg"
+        gray_obj = GrayModel.objects.get(id = GrayModel.objects.latest('id').id)
+        input_path = settings.BASE_DIR + gray_obj.image.url
+        output_path = settings.BASE_DIR + "/media/output/gray/gray.jpg"
         gray(input_path,output_path)
     return render(request, 'gray.html', {
         'form': form,
-        'obj': obj,
+        'gray_obj': gray_obj,
     })
 
 def gray(input_path,output_path):
@@ -43,27 +53,22 @@ def facereadfunc(request):
             return redirect('faceread')
     else:
         form = FaceReadForm()
-        max_id = FaceReadModel.objects.latest('id').id
-        obj = FaceReadModel.objects.get(id = max_id)
-        input_path = settings.BASE_DIR + obj.image.url
-        output_path = settings.BASE_DIR + "/media/faceread/faceread.jpg"
+        faceread_obj = FaceReadModel.objects.get(id = FaceReadModel.objects.latest('id').id)
+        input_path = settings.BASE_DIR + faceread_obj.image.url
+        output_path = settings.BASE_DIR + "/media/output/faceread/faceread.jpg"
         faceread(input_path,output_path)
     return render(request, 'faceread.html', {
         'form': form,
-        'obj': obj,
+        'faceread_obj': faceread_obj,
     })
 
 def faceread(input_path,output_path):
     img = cv2.imread(input_path)
     cascade = cv2.CascadeClassifier(settings.CASCADE_FILE_PATH)    
-    # グレースケール変換
     image_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # 顔領域の探索
     face = cascade.detectMultiScale(image_gray, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30))
-    # 顔領域を赤色の矩形で囲む
     for (x, y, w, h) in face:
         faceread_img = cv2.rectangle(img, (x, y), (x + w, y+h), (0,0,200), 3)
-    # 結果を出力
     cv2.imwrite(output_path, faceread_img)
 
 ##################################################################################################
@@ -76,14 +81,13 @@ def animefunc(request):
             return redirect('anime')
     else:
         form = AnimeForm()
-        max_id = AnimeModel.objects.latest('id').id
-        obj = AnimeModel.objects.get(id = max_id)
-        input_path = settings.BASE_DIR + obj.image.url
-        output_path = settings.BASE_DIR + "/media/anime/anime.jpg"
+        anime_obj = AnimeModel.objects.get(id = AnimeModel.objects.latest('id').id)
+        input_path = settings.BASE_DIR + anime_obj.image.url
+        output_path = settings.BASE_DIR + "/media/output/anime/anime.jpg"
         anime(input_path, output_path)
     return render(request, 'anime.html', {
         'form': form,
-        'obj': obj,
+        'anime_obj': anime_obj,
     })
 
 def anime(input_path, output_path):
@@ -112,25 +116,61 @@ def mosaicfunc(request):
             return redirect('mosaic')
     else:
         form = MosaicForm()
-        max_id = MosaicModel.objects.latest('id').id
-        obj = MosaicModel.objects.get(id = max_id)
-        input_path = settings.BASE_DIR + obj.image.url
-        output_path = settings.BASE_DIR + "/media/mosaic/mosaic.jpg"
+        mosaic_obj = MosaicModel.objects.get(id = MosaicModel.objects.latest('id').id)
+        input_path = settings.BASE_DIR + mosaic_obj.image.url
+        output_path = settings.BASE_DIR + "/media/output/mosaic/mosaic.jpg"
         mosaic(input_path, output_path)
     return render(request, 'mosaic.html', {
         'form': form,
-        'obj': obj,
+        'mosaic_obj': mosaic_obj,
     })
 
 def mosaic(input_path, output_path):
-    scale = 0.1
     img = cv2.imread(input_path)
-    # 画像を scale (0 < scale <= 1) 倍にリサイズする。
-    mosaiced = cv2.resize(img, dsize=None, fx=scale, fy=scale,
+    ratio = 0.1
+    mosaiced = cv2.resize(img, dsize=None, fx=ratio, fy=ratio,
                           interpolation=cv2.INTER_NEAREST)
-    # 元の大きさにリサイズする。
     h, w = img.shape[:2]
     mosaiced = cv2.resize(mosaiced, dsize=(w, h),
                           interpolation=cv2.INTER_NEAREST)
-    # 結果出力
     cv2.imwrite(output_path, mosaiced)
+
+##################################################################################################
+
+def facemosaicfunc(request):
+    if request.method == 'POST':
+        form = FaceMosaicForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('facemosaic')
+    else:
+        form = FaceMosaicForm()
+        facemosaic_obj = FaceMosaicModel.objects.get(id = FaceMosaicModel.objects.latest('id').id)
+        input_path = settings.BASE_DIR + facemosaic_obj.image.url
+        output_path = settings.BASE_DIR + "/media/output/facemosaic/facemosaic.jpg"
+        facemosaic(input_path, output_path)
+    return render(request, 'facemosaic.html', {
+        'form': form,
+        'facemosaic_obj': facemosaic_obj,
+    })
+
+def facemosaic(input_path, output_path):
+    img = cv2.imread(input_path)
+    cascade = cv2.CascadeClassifier(settings.CASCADE_FILE_PATH)
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    face = cascade.detectMultiScale(img_gray, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30))
+    
+    def mosaic(img, ratio=0.1):
+        mosaiced_img = cv2.resize(img, None, fx=ratio, fy=ratio, interpolation=cv2.INTER_NEAREST)
+        return cv2.resize(mosaiced_img, img.shape[:2][::-1], interpolation=cv2.INTER_NEAREST)
+    
+    def mosaic_area(img, x, y, w, h, ratio=0.1):
+        img[y:y + h, x:x + w] = mosaic(img[y:y + h, x:x + w], ratio)
+        return img
+
+    for (x, y, w, h) in face:
+        mosaiced_face_img = mosaic_area(img, x, y, w, h)
+
+    cv2.imwrite(output_path, mosaiced_face_img)
+
+##################################################################################################

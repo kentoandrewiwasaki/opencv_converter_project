@@ -1,0 +1,11 @@
+.row1_card {
+  display: flex;
+}
+
+.row2_card {
+  display: flex;
+}
+
+.card {
+  margin: 50px 95px;
+}

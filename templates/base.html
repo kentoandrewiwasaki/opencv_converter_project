@@ -15,25 +15,22 @@
   </head>
   <body>
     {% block header %}
-    <div class="alert alert-secondary" role="alert">
-      <ul class="nav">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'index' %}">トップページ</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'gray' %}">グレースケール化</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'anime' %}">アニメ化</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'faceread' %}">顔認証</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'mosaic' %}">モザイク化</a>
-        </li>
-      </ul>
-    </div>
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="{% url 'index' %}">OpenCV Converter</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <span class="sr-only">(current)</span>
+            <a class="nav-item nav-link active" href="{% url 'gray' %}">グレースケール化</a>
+            <a class="nav-item nav-link active" href="{% url 'anime' %}">アニメ化</a>
+            <a class="nav-item nav-link active" href="{% url 'faceread' %}">顔認証化</a>
+            <a class="nav-item nav-link active" href="{% url 'mosaic' %}">モザイク化</a>
+            <a class="nav-item nav-link active" href="{% url 'facemosaic' %}">顔モザイク化</a>
+          </div>
+        </div>
+    </nav>
     {% endblock header %}
 
     {% block content %}

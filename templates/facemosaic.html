@@ -4,18 +4,16 @@
 {% endblock customcss %}
 
 {% block content %}
-  <h1>グレースケール化</h1>
+  <h1>顔モザイク化</h1>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">変換</button>
   </form>
-  {% if gray_obj.image.url %}
-    <td><img src="{{ gray_obj.image.url }}" width=700 height=auto /></td>
+  {% if facemosaic_obj.image.url %}
+    <td><img src="{{ facemosaic_obj.image.url }}" width=700 height=auto /></td>
   {% endif %}
-  {% if gray_obj.gray_image.url %}
-    <td><img src="{{ gray_obj.gray_image.url }}" width=700 height=auto /></td>
+  {% if facemosaic_obj.facemosaic_image.url %}
+    <td><img src="{{ facemosaic_obj.facemosaic_image.url }}" width=700 height=auto /></td>
   {% endif %}
 {% endblock content %}
-
-
