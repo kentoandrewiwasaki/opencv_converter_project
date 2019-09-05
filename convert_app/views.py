@@ -32,7 +32,7 @@ def grayfunc(request):
         max_id = GrayModel.objects.latest('id').id
         gray_obj = GrayModel.objects.get( id = max_id )
         input_path = settings.BASE_DIR + gray_obj.image.url
-        output_path = settings.BASE_DIR + gray_obj.gray_image.url
+        output_path = settings.BASE_DIR + "/media/output/grayscale/grayscale.jpg"
         gray(input_path, output_path)
     return render(request, 'gray.html', {
         'form': form,
