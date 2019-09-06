@@ -8,7 +8,7 @@
 {% block content %}
   <div class="row1_card">
     <div class="card" style="width: 18rem;">
-        <img src="{{ gray_obj.gray_image.url }}" class="card-img-top" alt="...">
+        <img src="{{ gray_obj.gray_image.url }}" class="card-img-top" width=286 height=229>
         <div class="card-body">
           <h5 class="card-title">グレースケール化</h5>
           <p class="card-text"></p>
@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="card" style="width: 18rem;">
-        <img src="{{ anime_obj.anime_image.url }}" class="card-img-top" alt="...">
+        <img src="{{ anime_obj.anime_image.url }}" class="card-img-top" width=286 height=229>
         <div class="card-body">
           <h5 class="card-title">アニメ化</h5>
           <p class="card-text"></p>
@@ -24,9 +24,9 @@
         </div>
     </div>
     <div class="card" style="width: 18rem;">
-        <img src="{{ faceread_obj.faceread_image.url }}" class="card-img-top" alt="...">
+        <img src="{{ faceread_obj.faceread_image.url }}" class="card-img-top" width=286 height=229>
         <div class="card-body">
-          <h5 class="card-title">顔認証化</h5>
+          <h5 class="card-title">顔認証</h5>
           <p class="card-text"></p>
           <a href="{% url 'faceread' %}" class="btn btn-primary">変換ページへ移動</a>
         </div>
@@ -34,7 +34,7 @@
   </div>
   <div class="row2_card">
     <div class="card" style="width: 18rem;">
-      <img src="{{ mosaic_obj.mosaic_image.url }}" class="card-img-top" alt="...">
+      <img src="{{ mosaic_obj.mosaic_image.url }}" class="card-img-top" width=286 height=229>
         <div class="card-body">
           <h5 class="card-title">モザイク化</h5>
           <p class="card-text"></p>
@@ -42,9 +42,9 @@
         </div>
     </div>
     <div class="card" style="width: 18rem;">
-      <img src="{{ facemosaic_obj.facemosaic_image.url }}" class="card-img-top" alt="...">
+      <img src="{{ facemosaic_obj.facemosaic_image.url }}" class="card-img-top" width=286 height=229>
         <div class="card-body">
-          <h5 class="card-title">顔モザイク化</h5>
+          <h5 class="card-title">顔のモザイク化</h5>
           <p class="card-text"></p>
           <a href="{% url 'facemosaic' %}" class="btn btn-primary">変換ページへ移動</a>
         </div>

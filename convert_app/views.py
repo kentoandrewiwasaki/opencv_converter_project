@@ -4,6 +4,7 @@ from .models import GrayModel, FaceReadModel, AnimeModel, MosaicModel, FaceMosai
 import cv2
 import numpy as np
 from django.conf import settings
+from django.views.decorators.cache import never_cache
 
 def indexfunc(request):
     gray_obj = GrayModel.objects.get(id = GrayModel.objects.latest('id').id)
@@ -29,10 +30,9 @@ def grayfunc(request):
             return redirect('gray')
     else:
         form = GrayForm()
-        max_id = GrayModel.objects.latest('id').id
-        gray_obj = GrayModel.objects.get( id = max_id )
+        gray_obj = GrayModel.objects.get(id = GrayModel.objects.latest('id').id)
         input_path = settings.BASE_DIR + gray_obj.image.url
-        output_path = settings.BASE_DIR + "/media/output/grayscale/grayscale.jpg"
+        output_path = settings.BASE_DIR + "/media/output/gray/gray.jpg"
         gray(input_path, output_path)
     return render(request, 'gray.html', {
         'form': form,
@@ -69,7 +69,7 @@ def faceread(input_path,output_path):
     image_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     face = cascade.detectMultiScale(image_gray, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30))
     for (x, y, w, h) in face:
-        faceread_img = cv2.rectangle(img, (x, y), (x + w, y+h), (0,0,200), 3)
+        faceread_img = cv2.rectangle(img, (x, y), (x + w, y + h), (0,0,200), 3)
     cv2.imwrite(output_path, faceread_img)
 
 ##################################################################################################
@@ -129,11 +129,9 @@ def mosaicfunc(request):
 def mosaic(input_path, output_path):
     img = cv2.imread(input_path)
     ratio = 0.1
-    mosaiced = cv2.resize(img, dsize=None, fx=ratio, fy=ratio,
-                          interpolation=cv2.INTER_NEAREST)
+    mosaiced = cv2.resize(img, dsize=None, fx=ratio, fy=ratio, interpolation=cv2.INTER_NEAREST)
     h, w = img.shape[:2]
-    mosaiced = cv2.resize(mosaiced, dsize=(w, h),
-                          interpolation=cv2.INTER_NEAREST)
+    mosaiced = cv2.resize(mosaiced, dsize=(w, h), interpolation=cv2.INTER_NEAREST)
     cv2.imwrite(output_path, mosaiced)
 
 ##################################################################################################

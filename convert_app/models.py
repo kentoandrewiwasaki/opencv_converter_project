@@ -2,7 +2,7 @@ from django.db import models
 
 class GrayModel(models.Model):
     image = models.ImageField(upload_to="input/gray")
-    gray_image = models.ImageField(default = 'output/grayscale/grayscale.jpg')
+    gray_image = models.ImageField(default = 'output/gray/gray.jpg')
 
 class FaceReadModel(models.Model):
     image = models.ImageField(upload_to="input/faceread")
