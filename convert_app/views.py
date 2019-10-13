@@ -5,13 +5,34 @@ import cv2
 import numpy as np
 from django.conf import settings
 from django.views.decorators.cache import never_cache
+from django.db.models.base import ObjectDoesNotExist
 
 def indexfunc(request):
-    gray_obj = GrayModel.objects.get(id = GrayModel.objects.latest('id').id)
-    anime_obj = AnimeModel.objects.get(id = AnimeModel.objects.latest('id').id)
-    faceread_obj = FaceReadModel.objects.get(id = FaceReadModel.objects.latest('id').id)
-    mosaic_obj = MosaicModel.objects.get(id = MosaicModel.objects.latest('id').id)
-    facemosaic_obj = FaceMosaicModel.objects.get(id = FaceMosaicModel.objects.latest('id').id)
+    try:
+        gray_obj = GrayModel.objects.get(id = GrayModel.objects.latest('id').id)
+    except GrayModel.ObjectDoesNotExist:
+        gray_obj = ""
+
+    try:
+        anime_obj = AnimeModel.objects.get(id = AnimeModel.objects.latest('id').id)
+    except AnimeModel.ObjectDoesNotExist:
+        anime_obj = ""
+
+    try:
+        faceread_obj = FaceReadModel.objects.get(id = FaceReadModel.objects.latest('id').id)
+    except FaceReadModel.ObjectDoesNotExist:
+        faceread_obj = ""
+
+    try:
+        mosaic_obj = MosaicModel.objects.get(id = MosaicModel.objects.latest('id').id)
+    except MosaicModel.ObjectDoesNotExist:
+        mosaic_obj = ""
+
+    try:
+        facemosaic_obj = FaceMosaicModel.objects.get(id = FaceMosaicModel.objects.latest('id').id)
+    except FaceMosaicModel.ObjectDoesNotExist:
+        facemosaic_obj = ""
+
     return render(request, 'index.html', {
         'gray_obj': gray_obj,
         'anime_obj': anime_obj,
@@ -30,10 +51,14 @@ def grayfunc(request):
             return redirect('gray')
     else:
         form = GrayForm()
-        gray_obj = GrayModel.objects.get(id = GrayModel.objects.latest('id').id)
-        input_path = settings.BASE_DIR + gray_obj.image.url
-        output_path = settings.BASE_DIR + "/media/output/gray/gray.jpg"
-        gray(input_path, output_path)
+        try:
+            gray_obj = GrayModel.objects.get(id = GrayModel.objects.latest('id').id)
+            input_path = settings.BASE_DIR + gray_obj.image.url
+            input_path = settings.BASE_DIR + gray_obj.image.url
+            output_path = settings.BASE_DIR + "/media/output/gray/gray.jpg"
+            gray(input_path, output_path)
+        except:
+            gray_obj = ""
     return render(request, 'gray.html', {
         'form': form,
         'gray_obj': gray_obj,
@@ -54,10 +79,13 @@ def facereadfunc(request):
             return redirect('faceread')
     else:
         form = FaceReadForm()
-        faceread_obj = FaceReadModel.objects.get(id = FaceReadModel.objects.latest('id').id)
-        input_path = settings.BASE_DIR + faceread_obj.image.url
-        output_path = settings.BASE_DIR + "/media/output/faceread/faceread.jpg"
-        faceread(input_path,output_path)
+        try:
+            faceread_obj = FaceReadModel.objects.get(id = FaceReadModel.objects.latest('id').id)
+            input_path = settings.BASE_DIR + faceread_obj.image.url
+            output_path = settings.BASE_DIR + "/media/output/faceread/faceread.jpg"
+            faceread(input_path,output_path)
+        except:
+            faceread_obj = ""
     return render(request, 'faceread.html', {
         'form': form,
         'faceread_obj': faceread_obj,
@@ -82,10 +110,13 @@ def animefunc(request):
             return redirect('anime')
     else:
         form = AnimeForm()
-        anime_obj = AnimeModel.objects.get(id = AnimeModel.objects.latest('id').id)
-        input_path = settings.BASE_DIR + anime_obj.image.url
-        output_path = settings.BASE_DIR + "/media/output/anime/anime.jpg"
-        anime(input_path, output_path)
+        try:
+            anime_obj = AnimeModel.objects.get(id = AnimeModel.objects.latest('id').id)
+            input_path = settings.BASE_DIR + anime_obj.image.url
+            output_path = settings.BASE_DIR + "/media/output/anime/anime.jpg"
+            anime(input_path, output_path)
+        except:
+            anime_obj = ""
     return render(request, 'anime.html', {
         'form': form,
         'anime_obj': anime_obj,
@@ -117,10 +148,13 @@ def mosaicfunc(request):
             return redirect('mosaic')
     else:
         form = MosaicForm()
-        mosaic_obj = MosaicModel.objects.get(id = MosaicModel.objects.latest('id').id)
-        input_path = settings.BASE_DIR + mosaic_obj.image.url
-        output_path = settings.BASE_DIR + "/media/output/mosaic/mosaic.jpg"
-        mosaic(input_path, output_path)
+        try:
+            mosaic_obj = MosaicModel.objects.get(id = MosaicModel.objects.latest('id').id)
+            input_path = settings.BASE_DIR + mosaic_obj.image.url
+            output_path = settings.BASE_DIR + "/media/output/mosaic/mosaic.jpg"
+            mosaic(input_path, output_path)
+        except:
+            mosaic_obj = ""
     return render(request, 'mosaic.html', {
         'form': form,
         'mosaic_obj': mosaic_obj,
@@ -144,10 +178,13 @@ def facemosaicfunc(request):
             return redirect('facemosaic')
     else:
         form = FaceMosaicForm()
-        facemosaic_obj = FaceMosaicModel.objects.get(id = FaceMosaicModel.objects.latest('id').id)
-        input_path = settings.BASE_DIR + facemosaic_obj.image.url
-        output_path = settings.BASE_DIR + "/media/output/facemosaic/facemosaic.jpg"
-        facemosaic(input_path, output_path)
+        try:
+            facemosaic_obj = FaceMosaicModel.objects.get(id = FaceMosaicModel.objects.latest('id').id)
+            input_path = settings.BASE_DIR + facemosaic_obj.image.url
+            output_path = settings.BASE_DIR + "/media/output/facemosaic/facemosaic.jpg"
+            facemosaic(input_path, output_path)
+        except:
+            facemosaic_obj = ""
     return render(request, 'facemosaic.html', {
         'form': form,
         'facemosaic_obj': facemosaic_obj,
