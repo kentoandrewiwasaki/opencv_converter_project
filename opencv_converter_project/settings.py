@@ -134,3 +134,15 @@ MEDIA_URL = "/media/"
 LOGIN_URL = "login"
 
 CASCADE_FILE_PATH = os.path.join(BASE_DIR, 'haarcascade_frontalface_default.xml')
+
+
+DEBUG = False
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
+
+if not DEBUG:
+    import django_heroku
+    django_heroku.settings(locals())
