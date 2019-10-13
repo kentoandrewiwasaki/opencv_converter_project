@@ -83,7 +83,7 @@ def facereadfunc(request):
             faceread_obj = FaceReadModel.objects.get(id = FaceReadModel.objects.latest('id').id)
             input_path = settings.BASE_DIR + faceread_obj.image.url
             output_path = settings.BASE_DIR + "/media/output/faceread/faceread.jpg"
-            faceread(input_path,output_path)
+            faceread(input_path, output_path)
         except:
             faceread_obj = ""
     return render(request, 'faceread.html', {
@@ -91,9 +91,9 @@ def facereadfunc(request):
         'faceread_obj': faceread_obj,
     })
 
-def faceread(input_path,output_path):
+def faceread(input_path, output_path):
     img = cv2.imread(input_path)
-    cascade = cv2.CascadeClassifier(settings.CASCADE_FILE_PATH)    
+    cascade = cv2.CascadeClassifier(settings.CASCADE_FILE_PATH)
     image_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     face = cascade.detectMultiScale(image_gray, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30))
     for (x, y, w, h) in face:

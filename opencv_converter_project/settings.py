@@ -121,13 +121,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join('staticfiles')
+STATIC_ROOT = ('staticfiles')
 
 # STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 #CSSファイルの保存場所の指定
 STATICFILES_DIRS = [
-  os.path.join(BASE_DIR, "static")
+  os.path.join(BASE_DIR, "static"),
 ]
 
 #画像ファイルの保存場所の指定
@@ -151,3 +151,12 @@ except ImportError:
 if not DEBUG:
     import django_heroku
     django_heroku.settings(locals())
+
+
+# Parse database configuration from $DATABASE_URL
+import dj_database_url
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
