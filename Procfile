@@ -1,1 +1,1 @@
-web: gunicorn opencv_converter_project.wsgi --log-file -
+web: gunicorn rocky-plateau-76583.app
